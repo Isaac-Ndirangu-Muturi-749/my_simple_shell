@@ -1,65 +1,73 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <string.h>
-#include <sys/types.h>
-#include <sys/wait.h>
+#include <main.h>
 
-#define MAX_INPUT_SIZE 1024
+#include <main.h>
 
-// Function to parse and execute a command
-void execute_command(char *command) {
-    char *args[MAX_INPUT_SIZE];
-    int arg_count = 0;
-
-    // Tokenize the command into arguments
-    char *token = strtok(command, " ");
-    while (token != NULL) {
-        args[arg_count++] = token;
-        token = strtok(NULL, " ");
+// Function to handle batch mode
+int batch_mode(char *filename) {
+    int file_fd = open(filename, O_RDONLY);
+    if (file_fd == -1) {
+        perror("open");
+        return EXIT_FAILURE;
     }
-    args[arg_count] = NULL;
 
-    // Handle built-in commands
-    if (strcmp(args[0], "exit") == 0) {
-        exit(0);
-    } else if (strcmp(args[0], "cd") == 0) {
-        if (arg_count > 1) {
-            if (chdir(args[1]) != 0) {
-                perror("cd");
-            }
-        } else {
-            chdir(getenv("HOME"));
+    char *input = (char *)malloc(MAX_INPUT_SIZE);
+    size_t input_size = MAX_INPUT_SIZE;
+    ssize_t line_length;
+
+    if (input == NULL) {
+        perror("malloc");
+        close(file_fd);
+        return EXIT_FAILURE;
+    }
+
+    while ((line_length = _getline(&input, &input_size, file_fd)) != -1) {
+        input[line_length - 1] = '\0'; // Remove newline character
+        execute_command(input);
+    }
+
+    free(input);
+    close(file_fd);
+    return 0;
+}
+
+// Function to handle interactive mode
+int interactive_mode() {
+    char *input = (char *)malloc(MAX_INPUT_SIZE);
+    size_t input_size = MAX_INPUT_SIZE;
+    ssize_t line_length;
+
+    if (input == NULL) {
+        perror("malloc");
+        return EXIT_FAILURE;
+    }
+
+    while (1) {
+        write(STDOUT_FILENO, "$ ", 2); // Use write to print the prompt
+        fflush(stdout);
+
+        line_length = _getline(&input, &input_size, STDIN_FILENO);
+
+        if (line_length == -1) {
+            // Handle end of file (Ctrl+D)
+            write(STDOUT_FILENO, "\n", 1);
+            free(input);
+            break;
         }
-    } else if (strcmp(args[0], "alias") == 0) {
-        // Handle alias command (not implemented in this example)
-        // You can implement alias handling here
-    } else if (strcmp(args[0], "setenv") == 0) {
-        // Handle setenv command (not implemented in this example)
-        // You can implement environment variable setting here
-    } else if (strcmp(args[0], "unsetenv") == 0) {
-        // Handle unsetenv command (not implemented in this example)
-        // You can implement environment variable unsetting here
+
+        input[line_length - 1] = '\0'; // Remove newline character
+        execute_command(input);
+    }
+
+    free(input);
+    return 0;
+}
+
+int main(int argc, char *argv[]) {
+    if (argc > 1) {
+        // Batch mode
+        return batch_mode(argv[1]);
     } else {
-        // Fork a child process
-        pid_t pid = fork();
-
-        if (pid == 0) {
-            // Child process
-            if (execvp(args[0], args) == -1) {
-                perror("shell");
-                exit(EXIT_FAILURE);
-            }
-        } else if (pid < 0) {
-            perror("fork");
-        } else {
-            // Parent process
-            int status;
-            waitpid(pid, &status, 0);
-
-            if (WIFEXITED(status)) {
-                printf("Child process exited with status %d\n", WEXITSTATUS(status));
-            }
-        }
+        // Interactive mode
+        return interactive_mode();
     }
 }

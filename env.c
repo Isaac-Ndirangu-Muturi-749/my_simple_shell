@@ -1,4 +1,12 @@
-#include <main.h>
+#include "main.h"
+
+// Custom _getenv function
+char *_getenv(char *name);
+// Custom _setenv function
+int _setenv(char *var, char *value, int overwrite);
+// Custom _unsetenv function
+int _unsetenv(char *var);
+
 
 // Custom _getenv function
 char *_getenv(char *name) {

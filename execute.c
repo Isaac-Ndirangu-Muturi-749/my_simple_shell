@@ -1,5 +1,7 @@
-#include <main.h>
+#include "main.h"
 
+// Function to parse and execute a command
+void execute_command(char *command);
 
 // Function to parse and execute a command
 void execute_command(char *command) {

@@ -1,4 +1,7 @@
-#include <main.h>
+#include "main.h"
+
+// Custom _getline function
+ssize_t _getline(char **lineptr, size_t *n, int fd);
 
 // Custom _getline function
 ssize_t _getline(char **lineptr, size_t *n, int fd) {

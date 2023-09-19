@@ -1,6 +1,10 @@
-#include <main.h>
+#include "main.h"
 
-#include <main.h>
+// Function to handle batch mode
+int batch_mode(char *filename);
+// Function to handle interactive mode
+int interactive_mode();
+int main(int argc, char *argv[]);
 
 // Function to handle batch mode
 int batch_mode(char *filename) {

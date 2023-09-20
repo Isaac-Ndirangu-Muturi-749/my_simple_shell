@@ -1,20 +1,20 @@
 #include "main.h"
 
 /**
-* execute_exit - Executes the "exit" built-in command.
+* execute_exit - Executes the "exit" built-in cmd.
 *
-* @args: An array of strings representing the command arguments.
-* @arg_count: The number of arguments in the array.
+* @args: An array of strings representing the cmd arguments.
+* @arg_c: The number of arguments in the array.
 *
 * Return: The exit status to be used for terminating the shell.
 *
-* Description: This function processes the "exit" built-in command, which
+* Description: This function processes the "exit" built-in cmd, which
 * terminates the shell. If no arguments are provided, it exits with a status
 * of 0. If an argument is provided, it exits with the specified status.
 */
-int execute_exit(char **args, int arg_count)
+int execute_exit(char **args, int arg_c)
 {
-	if (arg_count > 1)
+	if (arg_c > 1)
 	{
 		int exit_status = _atoi(args[1]);
 
@@ -26,21 +26,21 @@ int execute_exit(char **args, int arg_count)
 }
 
 /**
- * execute_cd - Executes the "cd" built-in command.
+ * execute_cd - Executes the "cd" built-in cmd.
  *
- * @args: An array of strings representing the command arguments.
- * @arg_count: The number of arguments in the array.
+ * @args: An array of strings representing the cmd arguments.
+ * @arg_c: The number of arguments in the array.
  *
  * Return: 0 on success, -1 on failure.
  *
- * Description: This function processes the "cd" built-in command,
+ * Description: This function processes the "cd" built-in cmd,
  *  which changes the current working directory. If no arguments
  * are provided, it changes to the user's home directory. If an
  * argument is provided, it attempts to change to the specified directory.
  */
-int execute_cd(char **args, int arg_count)
+int execute_cd(char **args, int arg_c)
 {
-	if (arg_count > 1)
+	if (arg_c > 1)
 	{
 		if (chdir(args[1]) != 0)
 		{
@@ -53,20 +53,20 @@ int execute_cd(char **args, int arg_count)
 }
 
 /**
- * execute_setenv - Executes the "setenv" built-in command.
+ * execute_setenv - Executes the "setenv" built-in cmd.
  *
- * @args: An array of strings representing the command arguments.
- * @arg_count: The number of arguments in the array.
+ * @args: An array of strings representing the cmd arguments.
+ * @arg_c: The number of arguments in the array.
  *
  * Return: 0 on success, -1 on failure.
  *
- * Description: This function processes the "setenv" built-in command, which sets
- * or updates an environment variable. If the variable doesn't exist, it creates
- * a new one.
+ * Description: This function processes the "setenv" built-in cmd,
+ * which sets or updates an environment variable. If the variable
+ *  doesn't exist, it creates a new one.
  */
-int execute_setenv(char **args, int arg_count)
+int execute_setenv(char **args, int arg_c)
 {
-	if (arg_count != 3)
+	if (arg_c != 3)
 	{
 		char msg[] = "Usage: setenv VARIABLE VALUE\n";
 
@@ -85,19 +85,19 @@ int execute_setenv(char **args, int arg_count)
 }
 
 /**
- * execute_unsetenv - Executes the "unsetenv" built-in command.
+ * execute_unsetenv - Executes the "unsetenv" built-in cmd.
  *
- * @args: An array of strings representing the command arguments.
- * @arg_count: The number of arguments in the array.
+ * @args: An array of strings representing the cmd arguments.
+ * @arg_c: The number of arguments in the array.
  *
  * Return: 0 on success, -1 on failure.
  *
- * Description: This function processes the "unsetenv" built-in command, which
- * removes an environment variable.
+ * Description: This function processes the "unsetenv" built-in
+ *  cmd, which removes an environment variable.
  */
-int execute_unsetenv(char **args, int arg_count)
+int execute_unsetenv(char **args, int arg_c)
 {
-	if (arg_count != 2)
+	if (arg_c != 2)
 	{
 		char msg[] = "Usage: unsetenv VARIABLE\n";
 
@@ -115,10 +115,10 @@ int execute_unsetenv(char **args, int arg_count)
 }
 
 /**
- * execute_env - Executes the "env" built-in command.
+ * execute_env - Executes the "env" built-in cmd.
  *
- * Description: This function processes the "env" built-in command, which prints
- * the current environment.
+ * Description: This function processes the "env" built-in cmd,
+ * which prints the current environment.
  *
  * Return: Always returns 0.
  */

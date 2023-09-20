@@ -1,81 +1,84 @@
 #include "main.h"
 
+
 /**
- * execute_command - Parses and executes a command given as a string.
+ * execute_cmd - Parses and executes a cmd given as a string.
  *
- * @command: The command string to be parsed and executed.
+ * @cmd: The cmd string to be parsed and executed.
+ * @alias_list: A pointer to the AliasList structure.
  *
- * Description: This function takes a command string and parses it into
- * individual arguments, then executes the specified command. It supports
- * built-in commands like "cd" and "exit" and also handles external commands.
+ * Description: This function takes a cmd string and parses it into
+ * individual arguments, then executes the specified cmd. It supports
+ * built-in cmds like "cd" and "exit" and also handles external cmds.
  * The execution results are displayed on the standard output.
  */
-void execute_command(char *command)
+void execute_cmd(char *cmd, struct AliasList *alias_list)
 {
-	if (command[0] == '\0')
+	if (cmd[0] == '\0')
 	{
-		return; /* Ignore empty commands */
+		return; /* Ignore empty cmds */
 	}
 
-	/* Check if the command is a comment (starts with #) */
-	if (command[0] == '#')
+	/* Check if the cmd is a comment (starts with #) */
+	if (cmd[0] == '#')
 	{
 		return; /* Ignore comments */
 	}
 
 	/* Variables for $? and $$ */
-	int last_exit_status = 0; /* $? is initialized to 0 */
+	int lastexit_status = 0; /* $? is initialized to 0 */
 	pid_t shell_pid = getpid(); /* $$ is the shell's PID */
 
-	/* Tokenize the command by semicolons into separate commands */
-	char *commands[MAX_INPUT_SIZE];
-	int command_count = 0;
+	/* Tokenize the cmd by semicolons into separate cmds */
+	char *cmds[MAX_INPUT_SIZE];
+	int cmd_count = 0;
 
-	char *token = _strtok(command, ";");
+	char *token = _strtok(cmd, ";");
 
 	while (token != NULL)
 	{
-		commands[command_count++] = token;
+		cmds[cmd_count++] = token;
 		token = _strtok(NULL, ";");
 	}
 
-	for (int i = 0; i < command_count; i++)
+	for (int i = 0; i < cmd_count; i++)
 	{
-		execute_single_command(commands[i], &last_exit_status, shell_pid);
+		exec_one_cmd(cmds[i], &lastexit_status, shell_pid, alias_list);
 	}
 }
 
 /**
- * execute_single_command - Executes a single command string.
+ * exec_one_cmd - Executes a single cmd string.
  *
- * @command: The command string to be executed.
- * @last_exit_status: A pointer to the variable that holds the exit status.
+ * @cmd: The cmd string to be executed.
+ * @lastexit_status: A pointer to the variable that holds the exit status.
  * @shell_pid: The PID of the shell.
+ * @alias_list: A pointer to the AliasList structure.
  *
- * Description: This function tokenizes a single command string into arguments,
- * handles variable replacement, and executes the command.
+ * Description: This function tokenizes a single cmd string into arguments,
+ * handles variable replacement, and executes the cmd.
  */
-void execute_single_command(char *command, int *last_exit_status, pid_t shell_pid)
+void exec_one_cmd(char *cmd, int *lastexit_status, pid_t shell_pid, struct AliasList *alias_list)
 {
-	/* Tokenize the command into arguments */
-	int arg_count = 0;
+	/* Tokenize the cmd into arguments */
+	int arg_c = 0;
 	char *args[MAX_INPUT_SIZE];
 
-	char *token = _strtok(command, " ");
+	char *token = _strtok(cmd, " ");
 
 	while (token != NULL)
 	{
-		args[arg_count++] = token;
+		args[arg_c++] = token;
 		token = _strtok(NULL, " ");
 	}
-	args[arg_count] = NULL;
+	args[arg_c] = NULL;
 
 	/* Handle variable replacement in arguments */
-	handle_variable_replacement(args, arg_count, last_exit_status, shell_pid);
+	var_replace(args, arg_c, lastexit_status, shell_pid);
 
-	/* Try to execute the command as a built-in, if not, execute externally */
-	if (!execute_builtin_command(args, arg_count, last_exit_status))
+	/* Try to execute the cmd as a built-in, if not, execute externally */
+	if (!exec_builtin_cmd(alias_list, args, arg_c, lastexit_status))
 	{
-		execute_external_command(args, arg_count, last_exit_status);
+		execute_external_comand(args, arg_c, lastexit_status);
 	}
 }

@@ -1,34 +1,34 @@
 #include "main.h"
 
 /**
- * find_command_path - Finds the path of an external command.
+ * find_cmd_path - Finds the path of an external cmd.
  *
- * @command: The name of the command to find.
+ * @cmd: The name of the cmd to find.
  *
- * Return: A pointer to the command's path, or NULL if not found.
+ * Return: A pointer to the cmd's path, or NULL if not found.
  */
-char *find_command_path(char *command)
+char *find_cmd_path(char *cmd)
 {
-	/* Check if the command exists in one of the directories in PATH */
+	/* Check if the cmd exists in one of the directories in PATH */
 	char *path = _getenv("PATH");
 	char *path_copy = _strdup(path); /* Make a copy of PATH */
 	char *dir = _strtok(path_copy, ":");
-	char *command_path = NULL;
+	char *cmd_path = NULL;
 
 	while (dir != NULL)
 	{
-		/* Construct the full path to the command */
+		/* Construct the full path to the cmd */
 		char full_path[MAX_INPUT_SIZE];
 
 		_write_str(dir);
 		_write_char('/');
-		_write_str(command);
+		_write_str(cmd);
 
-		/* Check if the command exists in this directory */
+		/* Check if the cmd exists in this directory */
 		if (access(full_path, X_OK) == 0)
 		{
-			/* Command exists, set command_path and break */
-			command_path = _strdup(full_path);
+			/* Command exists, set cmd_path and break */
+			cmd_path = _strdup(full_path);
 			break;
 		}
 
@@ -36,31 +36,31 @@ char *find_command_path(char *command)
 	}
 
 	free(path_copy);
-	return (command_path);
+	return (cmd_path);
 }
 
 
 /**
- * execute_external_command - Executes an external command.
+ * execute_external_comand - Executes an external cmd.
  *
- * @args:             An array of strings representing the command arguments.
- * @arg_count:        The number of arguments in the array.
- * @last_exit_status: Pointer to an integer containing the last exit status.
+ * @args:             An array of strings representing the cmd arguments.
+ * @arg_c:        The number of arguments in the array.
+ * @lastexit_status: Pointer to an integer containing the last exit status.
  */
-void execute_external_command(char **args, int arg_count, int *last_exit_status)
+void execute_external_comand(char **args, int arg_c, int *lastexit_status)
 {
 	pid_t pid = fork();/* Fork a child process */
 
 	if (pid == 0)
 	{
-		char *command_path = find_command_path(args[0]);/* Child process */
+		char *cmd_path = find_cmd_path(args[0]);/* Child process */
 
-		if (command_path != NULL)
+		if (cmd_path != NULL)
 		{
-			/* Execute command using full path,Adjust no of arguments as needed*/
-			char *const command_argv[] = {command_path, args[0], args[1], args[2], NULL};
+			/* Execute cmd using full path,Adjust no of arguments as needed*/
+			char *const cmd_argv[] = {cmd_path, args[0], args[1], args[2], NULL};
 
-			if (execve(command_path, command_argv, environ) == -1)
+			if (execve(cmd_path, cmd_argv, environ) == -1)
 			{
 				perror("execve");
 				exit(EXIT_FAILURE);
@@ -86,7 +86,7 @@ void execute_external_command(char **args, int arg_count, int *last_exit_status)
 
 		if (WIFEXITED(status))
 		{
-			*last_exit_status = WEXITSTATUS(status);
+			*lastexit_status = WEXITSTATUS(status);
 		}
 	}
 }

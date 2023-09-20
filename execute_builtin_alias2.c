@@ -6,9 +6,9 @@
  * Parameters:
  * @list: The alias list in which the alias will be updated.
  * @name: The name of the alias to be updated.
- * @new_value: The new value to assign to the alias.
+ * @newval: The new value to assign to the alias.
  */
-void update_alias(struct AliasList *list, const char *name, const char *new_value)
+void update_alias(struct AliasList *list, const char *name, const char *newval)
 {
 	struct Alias *current = list->head;
 
@@ -17,7 +17,7 @@ void update_alias(struct AliasList *list, const char *name, const char *new_valu
 		if (strcmp(current->name, name) == 0)
 		{
 			free(current->value);
-			current->value = strdup(new_value);
+			current->value = strdup(newval);
 			return;
 		}
 		current = current->next;
@@ -25,21 +25,21 @@ void update_alias(struct AliasList *list, const char *name, const char *new_valu
 }
 
 /**
- * execute_alias - Execute the "alias" built-in command.
+ * execute_alias - Execute the "alias" built-in cmd.
  *
  * Parameters:
- * @list: The alias list in which to execute the command.
- * @args: An array of strings representing the command arguments.
- * @arg_count: The number of arguments in the array.
+ * @list: The alias list in which to execute the cmd.
+ * @args: An array of strings representing the cmd arguments.
+ * @arg_c: The number of arguments in the array.
  */
-void execute_alias(struct AliasList *list, char **args, int arg_count)
+void execute_alias(struct AliasList *list, char **args, int arg_c)
 {
-	if (arg_count < 2)
+	if (arg_c < 2)
 	{
 		_write_str("Usage: alias [name[='value'] ...]\n");
 	} else
 	{
-		for (int i = 1; i < arg_count; i++)
+		for (int i = 1; i < arg_c; i++)
 		{
 			/* Split the argument into name and value */
 			char *name = args[i];

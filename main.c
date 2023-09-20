@@ -1,6 +1,31 @@
 
 #include "main.h"
 
+
+/*  Define the alias list variable*/
+struct AliasList *alias_list = NULL;
+
+/**
+ * main - The main entry point of the program.
+ *
+ * @argc: The number of command-line arguments.
+ * @argv: An array of strings containing the command-line arguments.
+ *
+ * Return: 0 on success, or an error code on failure.
+ */
+int main(int argc, char *argv[])
+{
+	alias_list = create_alias_list();
+
+	if (argc > 1)
+	{
+		/* Batch mode */
+		return (batch_mode(argv[1]));
+	}
+	/* Interactive mode */
+	return (interactive_mode());
+}
+
 /**
  * batch_mode - Handles batch mode execution by reading and executing commands
  *              from a specified file.
@@ -80,23 +105,4 @@ int interactive_mode(void)
 
 	free(input);
 	return (0);
-}
-
-/**
- * main - The main entry point of the program.
- *
- * @argc: The number of command-line arguments.
- * @argv: An array of strings containing the command-line arguments.
- *
- * Return: 0 on success, or an error code on failure.
- */
-int main(int argc, char *argv[])
-{
-	if (argc > 1)
-	{
-		/* Batch mode */
-		return (batch_mode(argv[1]));
-	}
-	/* Interactive mode */
-	return (interactive_mode());
 }

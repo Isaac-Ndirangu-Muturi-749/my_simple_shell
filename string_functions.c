@@ -1,125 +1,132 @@
 #include "main.h"
 
-// Custom _strcpy function
-char *_strcpy(char *dest, const char *src);
-// Custom _strcat function
-char *_strcat(char *dest, const char *src);
-// Custom _strcmp function
-int _strcmp(char *s1, char *s2);
-// Custom _strtok function
-char *_strtok(char *str, const char *delim);
-// Custom _strchr function
-const char *_strchr(const char *s, char c);
-// Custom _strlen function
-int _strlen(const char *s);
-// Custom _strdup function
-char *_strdup(const char *s);
-// Custom _atoi function
-int _atoi(char *str);
+/**
+ * _strcpy - a function that copies a string from src to dest
+ * @dest: pointer to the destination buffer
+ * @src: pointer to the source string
+ * Return: pointer to dest
+ */
+char *_strcpy(char *dest, const char *src)
+{
+	int i = 0;
 
+	while (src[i] != '\0')
+	{
+		dest[i] = src[i];
+		i++;
+	}
 
-// Custom _strcpy function
-char *_strcpy(char *dest, const char *src) {
-    char *original_dest = dest;
-    while ((*dest++ = *src++) != '\0');
-    return original_dest;
-}
+	dest[i] = '\0';
 
-// Custom _strcat function
-char *_strcat(char *dest, const char *src) {
-    char *original_dest = dest;
-    while (*dest) {
-        dest++;
-    }
-    while ((*dest++ = *src++) != '\0');
-    return original_dest;
-}
-
-// Custom _strcmp function
-int _strcmp(char *s1, char *s2) {
-    while (*s1 && (*s1 == *s2)) {
-        s1++;
-        s2++;
-    }
-    return (*s1 - *s2);
-}
-
-// Custom _strtok function
-char *_strtok(char *str, const char *delim) {
-    static char *last_str = NULL;
-    if (str != NULL) {
-        last_str = str;
-    }
-    if (last_str == NULL || *last_str == '\0') {
-        return NULL;
-    }
-    char *start = last_str;
-    while (*start != '\0' && _strchr(delim, *start) != NULL) {
-        start++;
-    }
-    if (*start == '\0') {
-        last_str = NULL;
-        return NULL;
-    }
-    char *end = start + 1;
-    while (*end != '\0' && _strchr(delim, *end) == NULL) {
-        end++;
-    }
-    *end = '\0';
-    last_str = end + 1;
-    return start;
-}
-
-// Custom _strchr function
-const char *_strchr(const char *s, char c) {
-    while (*s != '\0') {
-        if (*s == c)
-            return s;
-        s++;
-    }
-    if (*s == c)
-        return s;
-    return NULL;
+	return (dest);
 }
 
 
-// Custom _strlen function
-int _strlen(const char *s) {
-    int length = 0;
-    while (*s != '\0') {
-        length++;
-        s++;
-    }
-    return (length);
+/**
+ * _strcat - Concatenates two strings.
+ * @dest: The destination string.
+ * @src: The source string to be appended.
+ *
+ * Return: A pointer to the resulting string dest.
+ */
+char *_strcat(char *dest, char *src)
+{
+	int dest_len = 0;
+	int i;
+
+	/*Find the length of the destination string*/
+	while (dest[dest_len] != '\0')
+		dest_len++;
+
+	/*Append the source string to the destination string*/
+	for (i = 0; src[i] != '\0'; i++)
+		dest[dest_len++] = src[i];
+
+	/*Add a terminating null byte at the end*/
+	dest[dest_len] = '\0';
+
+	return (dest);
 }
 
-// Custom _strdup function
-char *_strdup(const char *s) {
-    size_t len = _strlen(s) + 1; // +1 for the null terminator
-    char *dup = (char *)malloc(len);
-    if (dup == NULL) {
-        perror("malloc");
-        exit(EXIT_FAILURE);
-    }
-    _strcpy(dup, s);
-    return dup;
+/**
+ * _strcmp - Compares two strings.
+ *
+ * @s1: First string to compare.
+ * @s2: Second string to compare.
+ *
+ * Return: An integer less than, equal to, or greater than zero if s1 is found,
+ * respectively, to be less than, to match, or be greater than s2.
+ */
+int _strcmp(char *s1, char *s2)
+{
+	while (*s1 && (*s1 == *s2))
+	{
+		s1++;
+		s2++;
+	}
+	return (*s1 - *s2);
 }
 
-// Custom _atoi function
-int _atoi(char *str) {
-    int result = 0;
-    int sign = 1;
-    int i = 0;
+/**
+ * _strtok - Breaks a string into a sequence of zero or more non-empty tokens.
+ *
+ * @str: The string to be tokenized.
+ * @delim: A set of delimiter characters used to separate tokens.
+ *
+ * Return: A pointer to the next token, or NULL if no more tokens are found.
+ */
+char *_strtok(char *str, const char *delim)
+{
+	static char *last_str;
 
-    if (str[0] == '-') {
-        sign = -1;
-        i++;
-    }
+	if (str != NULL)
+	{
+		last_str = str;
+	}
+	if (last_str == NULL || *last_str == '\0')
+	{
+		return (NULL);
+	}
+	char *start = last_str;
 
-    while (str[i] != '\0') {
-        result = result * 10 + (str[i] - '0');
-        i++;
-    }
+	while (*start != '\0' && _strchr(delim, *start) != NULL)
+	{
+		start++;
+	}
+	if (*start == '\0')
+	{
+		last_str = NULL;
+		return (NULL);
+	}
+	char *end = start + 1;
 
-    return sign * result;
+	while (*end != '\0' && _strchr(delim, *end) == NULL)
+	{
+		end++;
+	}
+	*end = '\0';
+	last_str = end + 1;
+	return (start);
 }
+
+/**
+ * _strchr - Locates the first occurrence of a character in a string.
+ *
+ * @s: The string to search within.
+ * @c: The character to search for.
+ *
+ * Return: A pointer to the first occurrence of @c in @s, or NULL if not found.
+ */
+const char *_strchr(const char *s, char c)
+{
+	while (*s != '\0')
+	{
+		if (*s == c)
+			return (s);
+		s++;
+	}
+	if (*s == c)
+		return (s);
+	return (NULL);
+}
+

@@ -9,7 +9,9 @@
  */
 void _write_str(const char *str)
 {
-	write(STDOUT_FILENO, str, _strlen(str));
+	size_t len = _strlen(str);
+
+	write(STDOUT_FILENO, str, len);
 }
 
 /**

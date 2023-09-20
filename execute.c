@@ -41,26 +41,41 @@ void execute_command(char *command)
 
 	for (int i = 0; i < command_count; i++)
 	{
-		/* Tokenize each separated command into arguments */
-		char *current_command = commands[i];
-		int arg_count = 0;
-		char *args[MAX_INPUT_SIZE];
+		execute_single_command(commands[i], &last_exit_status, shell_pid);
+	}
+}
 
-		token = _strtok(current_command, " ");
-		while (token != NULL)
-		{
-			args[arg_count++] = token;
-			token = _strtok(NULL, " ");
-		}
-		args[arg_count] = NULL;
+/**
+ * execute_single_command - Executes a single command string.
+ *
+ * @command: The command string to be executed.
+ * @last_exit_status: A pointer to the variable that holds the exit status.
+ * @shell_pid: The PID of the shell.
+ *
+ * Description: This function tokenizes a single command string into arguments,
+ * handles variable replacement, and executes the command.
+ */
+void execute_single_command(char *command, int *last_exit_status, pid_t shell_pid)
+{
+	/* Tokenize the command into arguments */
+	int arg_count = 0;
+	char *args[MAX_INPUT_SIZE];
 
-		/* Handle variable replacement in arguments */
-		handle_variable_replacement(args, arg_count, &last_exit_status, shell_pid);
+	char *token = _strtok(command, " ");
 
-		/* Try to execute the command as a built-in, if not, execute externally */
-		if (!execute_builtin_command(args, arg_count, &last_exit_status))
-		{
-			execute_external_command(args, arg_count, &last_exit_status);
-		}
+	while (token != NULL)
+	{
+		args[arg_count++] = token;
+		token = _strtok(NULL, " ");
+	}
+	args[arg_count] = NULL;
+
+	/* Handle variable replacement in arguments */
+	handle_variable_replacement(args, arg_count, last_exit_status, shell_pid);
+
+	/* Try to execute the command as a built-in, if not, execute externally */
+	if (!execute_builtin_command(args, arg_count, last_exit_status))
+	{
+		execute_external_command(args, arg_count, last_exit_status);
 	}
 }

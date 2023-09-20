@@ -49,18 +49,15 @@ char *find_command_path(char *command)
  */
 void execute_external_command(char **args, int arg_count, int *last_exit_status)
 {
-	/* Fork a child process */
-	pid_t pid = fork();
+	pid_t pid = fork();/* Fork a child process */
 
 	if (pid == 0)
 	{
-		/* Child process */
-		char *command_path = find_command_path(args[0]);
+		char *command_path = find_command_path(args[0]);/* Child process */
 
 		if (command_path != NULL)
 		{
-			/* Execute the command using the full path */
-			/* Adjust the number of arguments as needed*/
+			/* Execute command using full path,Adjust no of arguments as needed*/
 			char *const command_argv[] = {command_path, args[0], args[1], args[2], NULL};
 
 			if (execve(command_path, command_argv, environ) == -1)
@@ -70,8 +67,7 @@ void execute_external_command(char **args, int arg_count, int *last_exit_status)
 			}
 		} else
 		{
-			/* Command not found in PATH */
-			char msg[MAX_INPUT_SIZE];
+			char msg[MAX_INPUT_SIZE];/* Command not found in PATH */
 
 			_write_str("Command not found: ");
 			_write_str(args[0]);
@@ -84,8 +80,7 @@ void execute_external_command(char **args, int arg_count, int *last_exit_status)
 		perror("fork");
 	} else
 	{
-		/* Parent process */
-		int status;
+		int status;/* Parent process */
 
 		waitpid(pid, &status, 0);
 

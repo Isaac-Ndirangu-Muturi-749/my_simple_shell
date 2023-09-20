@@ -1,41 +1,39 @@
-
 #include "main.h"
-
-
-/*  Define the alias list variable*/
-struct AliasList *alias_list = NULL;
 
 /**
  * main - The main entry point of the program.
  *
- * @argc: The number of command-line arguments.
- * @argv: An array of strings containing the command-line arguments.
+ * @argc: The number of cmd-line arguments.
+ * @argv: An array of strings containing the cmd-line arguments.
  *
  * Return: 0 on success, or an error code on failure.
  */
 int main(int argc, char *argv[])
 {
-	alias_list = create_alias_list();
+	/* Create a local AliasList for managing aliases */
+	struct AliasList *alias_list = create_alias_list();
 
 	if (argc > 1)
 	{
-		/* Batch mode */
-		return (batch_mode(argv[1]));
+		/* Batch mode: Pass alias_list to batch_mode */
+		return (batch_mode(argv[1], alias_list));
 	}
-	/* Interactive mode */
-	return (interactive_mode());
+	/* Interactive mode: Pass alias_list to interactive_mode */
+	return (interactive_mode(alias_list));
 }
 
 /**
- * batch_mode - Handles batch mode execution by reading and executing commands
+ * batch_mode - Handles batch mode execution by reading and executing cmds
  *              from a specified file.
  *
- * @filename: The name of the batch file to read and execute commands from.
+ * @filename: The name of the batch file to read and execute cmds from.
+ * @alias_list: A pointer to the AliasList for managing aliases.
  *
  * Return: 0 on success, or an error code on failure.
  */
-int batch_mode(char *filename)
+int batch_mode(char *filename, struct AliasList *alias_list)
 {
+	/* Open the batch file for reading */
 	int file_fd = open(filename, O_RDONLY);
 
 	if (file_fd == -1)
@@ -44,6 +42,7 @@ int batch_mode(char *filename)
 		return (EXIT_FAILURE);
 	}
 
+	/* Allocate memory for input */
 	char *input = (char *)malloc(MAX_INPUT_SIZE);
 	size_t input_size = MAX_INPUT_SIZE;
 	ssize_t line_length;
@@ -55,12 +54,15 @@ int batch_mode(char *filename)
 		return (EXIT_FAILURE);
 	}
 
+	/* Read and execute cmds from the batch file */
 	while ((line_length = _getline(&input, &input_size, file_fd)) != -1)
 	{
-		input[line_length - 1] = '\0'; /*Remove newline character*/
-		execute_command(input);
+		input[line_length - 1] = '\0'; /* Remove newline character */
+		execute_cmd(input, alias_list);
+;
 	}
 
+	/* Clean up and close the file */
 	free(input);
 	close(file_fd);
 	return (0);
@@ -68,12 +70,15 @@ int batch_mode(char *filename)
 
 /**
  * interactive_mode - Handles interactive mode execution by reading and
- * executing commands entered by the user.
+ * executing cmds entered by the user.
+ *
+ * @alias_list: A pointer to the AliasList for managing aliases.
  *
  * Return: 0 on success, or an error code on failure.
  */
-int interactive_mode(void)
+int interactive_mode(struct AliasList *alias_list)
 {
+	/* Allocate memory for input */
 	char *input = (char *)malloc(MAX_INPUT_SIZE);
 	size_t input_size = MAX_INPUT_SIZE;
 	ssize_t line_length;
@@ -86,7 +91,8 @@ int interactive_mode(void)
 
 	while (1)
 	{
-		write(STDOUT_FILENO, "$ ", 2); /* Use write to print the prompt */
+		/* Print the shell prompt */
+		write(STDOUT_FILENO, "$ ", 2);
 		fflush(stdout);
 
 		line_length = _getline(&input, &input_size, STDIN_FILENO);
@@ -100,9 +106,11 @@ int interactive_mode(void)
 		}
 
 		input[line_length - 1] = '\0'; /* Remove newline character */
-		execute_command(input);
+		execute_cmd(input, alias_list);
+;
 	}
 
+	/* Clean up memory */
 	free(input);
 	return (0);
 }

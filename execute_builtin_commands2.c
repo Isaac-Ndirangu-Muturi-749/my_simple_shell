@@ -1,38 +1,39 @@
 #include "main.h"
 
 /**
- * execute_builtin_command - Executes built-in commands.
+ * exec_builtin_cmd - Executes built-in cmds.
  *
- * @args: An array of strings representing the command arguments.
- * @arg_count: The number of arguments in the array.
- * @last_exit_status: Pointer to an integer containing the last exit status.
+ * @alias_list: A pointer to the alias list.
+ * @args: An array of strings representing the cmd arguments.
+ * @arg_c: The number of arguments in the array.
+ * @lastexit_status: Pointer to an integer containing the last exit status.
  *
- * Return: The exit status of the executed built-in command.
+ * Return: The exit status of the executed built-in cmd.
  *
- * Description: This function processes and executes various built-in commands,
- * such as "exit," "cd," "setenv," "unsetenv," and "env."
+ * Description: This function processes and executes various built-in cmds,
+ * such as "exit," "cd," "alias," "setenv," "unsetenv," and "env."
  */
-int execute_builtin_command(char **args, int arg_count, int *last_exit_status)
+int exec_builtin_cmd(struct AliasList *alias_list, char **args, int arg_c, int *lastexit_status)
 {
 	if (_strcmp(args[0], "exit") == 0)
 	{
-		execute_exit(args, arg_count);
+		execute_exit(args, arg_c);
 	}
 	else if (_strcmp(args[0], "cd") == 0)
 	{
-		execute_cd(args, arg_count);
+		execute_cd(args, arg_c);
 	}
 	else if (_strcmp(args[0], "alias") == 0)
 	{
-		execute_alias(alias_list, args, arg_count);
+		execute_alias(alias_list, args, arg_c);
 	}
 	else if (_strcmp(args[0], "setenv") == 0)
 	{
-		execute_setenv(args, arg_count);
+		execute_setenv(args, arg_c);
 	}
 	else if (_strcmp(args[0], "unsetenv") == 0)
 	{
-		execute_unsetenv(args, arg_count);
+		execute_unsetenv(args, arg_c);
 	}
 	else if (_strcmp(args[0], "env") == 0)
 	{
@@ -40,7 +41,7 @@ int execute_builtin_command(char **args, int arg_count, int *last_exit_status)
 	}
 	else
 	{
-		return (0); /* Not a built-in command */
+		return (0); /* Not a built-in cmd */
 	}
 
 	return (1); /* Command was a built-in */

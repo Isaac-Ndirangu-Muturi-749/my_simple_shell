@@ -9,8 +9,8 @@
  */
 size_t _getenv_len(const char *var)
 {
-    size_t var_len = _strlen(var);
-    char **env_ptr;
+	size_t var_len = _strlen(var);
+	char **env_ptr;
 
 	if (!var)
 		return (0);
@@ -33,8 +33,8 @@ size_t _getenv_len(const char *var)
 void _add_env_var(const char *new_var)
 {
 	int env_count = 0;
-    char **new_environ;
-    int i;
+	char **new_environ;
+	int i;
 
 	while (environ[env_count])
 		env_count++;
@@ -67,48 +67,45 @@ void _add_env_var(const char *new_var)
  */
 int _setenv(const char *var, const char *value, int overwrite)
 {
-    size_t var_len = _strlen(var);
-    size_t value_len = _strlen(value);
-    size_t new_var_len = var_len + value_len + 2;
-    char *ptr;
-    char *new_var;
+	size_t var_len = _strlen(var);
+	size_t value_len = _strlen(value);
+	size_t new_var_len = var_len + value_len + 2;
+	char *ptr;
+	char *new_var;
 
-    if (!var || !value)
-        return (-1);
+	if (!var || !value)
+		return (-1);
 
-    new_var = (char *)malloc(new_var_len * sizeof(char));
+	new_var = (char *)malloc(new_var_len * sizeof(char));
 
-    if (!new_var)
-    {
-        perror("malloc");
-        exit(EXIT_FAILURE);
-    }
+	if (!new_var)
+	{
+		perror("malloc");
+		exit(EXIT_FAILURE);
+	}
 
-    /* Construct the new_var string using your write functions */
-    ptr = new_var;
+	/* Construct the new_var string using your write functions */
+	ptr = new_var;
 
-    _strcpy(ptr, var);
-    ptr += _strlen(var);
+	_strcpy(ptr, var);
+	ptr += _strlen(var);
 
-    _write_char('=');
-    _write_str(ptr);
-    ptr++;
+	_write_char('=');
+	_write_str(ptr);
+	ptr++;
 
-    _strcpy(ptr, value);
+	_strcpy(ptr, value);
 
-    /* Output the value of ptr using your custom _write function */
-    _write_str(ptr);
+	/* Output the value of ptr using your custom _write function */
+	_write_str(ptr);
 
-    if (_getenv_len(var) > 0 && !overwrite)
-    {
-        free(new_var);
-        return (0); /* Variable exists, and overwrite is disabled. */
-    }
-
-    _add_env_var(new_var);
-
-    free(new_var); /* Free dynamically allocated memory */
-
-    return (0);
+	if (_getenv_len(var) > 0 && !overwrite)
+	{
+		free(new_var);
+		return (0); /* Variable exists, and overwrite is disabled. */
+	}
+	_add_env_var(new_var);
+	free(new_var); /* Free dynamically allocated memory */
+	return (0);
 }
 

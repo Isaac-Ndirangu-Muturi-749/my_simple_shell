@@ -16,39 +16,39 @@
  */
 void var_replace(char **args, int arg_c, int *lastexit_status, pid_t shell_pid)
 {
-    int j;
+	int j;
 
-    for (j = 0; j < arg_c; j++)
-    {
-        char exit_status_str[10];
-        char shell_pid_str[10];
-        char *new_arg;
+	for (j = 0; j < arg_c; j++)
+	{
+		char exit_status_str[10];
+		char shell_pid_str[10];
+		char *new_arg;
 
-        if (_strcmp(args[j], "$?") == 0)
-        {
-            /* Replace $? with the last exit status */
-            _write_int(*lastexit_status);
-            new_arg = _strdup(exit_status_str);
+		if (_strcmp(args[j], "$?") == 0)
+		{
+			/* Replace $? with the last exit status */
+			_write_int(*lastexit_status);
+			new_arg = _strdup(exit_status_str);
 
-            if (new_arg == NULL)
-            {
-                perror("malloc");
-                exit(EXIT_FAILURE);
-            }
-            args[j] = new_arg;
-        }
-        else if (_strcmp(args[j], "$$") == 0)
-        {
-            /* Replace $$ with the shell's PID */
-            _write_int(shell_pid);
-            new_arg = _strdup(shell_pid_str);
+			if (new_arg == NULL)
+			{
+				perror("malloc");
+				exit(EXIT_FAILURE);
+			}
+			args[j] = new_arg;
+		}
+		else if (_strcmp(args[j], "$$") == 0)
+		{
+			/* Replace $$ with the shell's PID */
+			_write_int(shell_pid);
+			new_arg = _strdup(shell_pid_str);
 
-            if (new_arg == NULL)
-            {
-                perror("malloc");
-                exit(EXIT_FAILURE);
-            }
-            args[j] = new_arg;
-        }
-    }
+			if (new_arg == NULL)
+			{
+				perror("malloc");
+				exit(EXIT_FAILURE);
+			}
+			args[j] = new_arg;
+		}
+	}
 }

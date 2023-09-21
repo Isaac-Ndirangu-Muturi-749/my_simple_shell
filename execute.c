@@ -10,29 +10,29 @@
  */
 void execute_command(char *command, struct AliasList *alias_list)
 {
-    int lastexit_status = 0; /* $? is initialized to 0 */
-    pid_t shell_pid = getpid(); /* $$ is the shell's PID */
-    char *commands[MAX_INPUT_SIZE];
-    char *token;
+	int lastexit_status = 0; /* $? is initialized to 0 */
+	pid_t shell_pid = getpid(); /* $$ is the shell's PID */
+	char *commands[MAX_INPUT_SIZE];
+	char *token;
 	int i;
 	int command_count;
 
-    /* Split the command into individual commands */
-    token = _strtok(command, ";");
+	/* Split the command into individual commands */
+	token = _strtok(command, ";");
 
-    command_count = 0;
+	command_count = 0;
 
-    while (token != NULL)
-    {
-        commands[command_count++] = token;
-        token = _strtok(NULL, ";");
-    }
+	while (token != NULL)
+	{
+		commands[command_count++] = token;
+		token = _strtok(NULL, ";");
+	}
 
-    /* Loop through individual commands and execute them */
-    for (i = 0; i < command_count; i++)
-    {
-        execute_one_command(commands[i], &lastexit_status, shell_pid, alias_list);
-    }
+	/* Loop through individual commands and execute them */
+	for (i = 0; i < command_count; i++)
+	{
+		execute_one_command(commands[i], &lastexit_status, shell_pid, alias_list);
+	}
 }
 
 /**
@@ -45,25 +45,25 @@ void execute_command(char *command, struct AliasList *alias_list)
  */
 void execute_one_command(char *command, int *lastexit_status, pid_t shell_pid, struct AliasList *alias_list)
 {
-    /* Tokenize the command into arguments */
-    int arg_c = 0;
-    char *args[MAX_INPUT_SIZE];
+	/* Tokenize the command into arguments */
+	int arg_c = 0;
+	char *args[MAX_INPUT_SIZE];
 
-    char *token = _strtok(command, " ");
+	char *token = _strtok(command, " ");
 
-    while (token != NULL)
-    {
-        args[arg_c++] = token;
-        token = _strtok(NULL, " ");
-    }
-    args[arg_c] = NULL;
+	while (token != NULL)
+	{
+		args[arg_c++] = token;
+		token = _strtok(NULL, " ");
+	}
+	args[arg_c] = NULL;
 
-    /* Handle variable replacement in arguments */
-    var_replace(args, arg_c, lastexit_status, shell_pid);
+	/* Handle variable replacement in arguments */
+	var_replace(args, arg_c, lastexit_status, shell_pid);
 
-    /* Try to execute the command as a built-in, if not, execute externally */
-    if (!exec_builtin_cmd(alias_list, args, arg_c, lastexit_status))
-    {
-        execute_external_command(args, arg_c, lastexit_status);
-    }
+	/* Try to execute the command as a built-in, if not, execute externally */
+	if (!exec_builtin_cmd(alias_list, args, arg_c, lastexit_status))
+	{
+		execute_external_command(args, arg_c, lastexit_status);
+	}
 }

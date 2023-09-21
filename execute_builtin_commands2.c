@@ -15,34 +15,34 @@
  */
 int exec_builtin_cmd(struct AliasList *alias_list, char **args, int arg_c, int __attribute__((unused)) *lastexit_status)
 {
-    if (_strcmp(args[0], "exit") == 0)
-    {
-        execute_exit(args, arg_c);
-    }
-    else if (_strcmp(args[0], "cd") == 0)
-    {
-        execute_cd(args, arg_c);
-    }
-    else if (_strcmp(args[0], "alias") == 0)
-    {
-        execute_alias(alias_list, args, arg_c);
-    }
-    else if (_strcmp(args[0], "setenv") == 0)
-    {
-        execute_setenv(args, arg_c);
-    }
-    else if (_strcmp(args[0], "unsetenv") == 0)
-    {
-        execute_unsetenv(args, arg_c);
-    }
-    else if (_strcmp(args[0], "env") == 0)
-    {
-        execute_env();
-    }
-    else
-    {
-        return (0); /* Not a built-in cmd */
-    }
+	if (_strcmp(args[0], "exit") == 0)
+	{
+		execute_exit(args, arg_c);
+	}
+	else if (_strcmp(args[0], "cd") == 0)
+	{
+		execute_cd(args, arg_c);
+	}
+	else if (_strcmp(args[0], "alias") == 0)
+	{
+		execute_alias(alias_list, args, arg_c);
+	}
+	else if (_strcmp(args[0], "setenv") == 0)
+	{
+		execute_setenv(args, arg_c);
+	}
+	else if (_strcmp(args[0], "unsetenv") == 0)
+	{
+		execute_unsetenv(args, arg_c);
+	}
+	else if (_strcmp(args[0], "env") == 0)
+	{
+		execute_env();
+	}
+	else
+	{
+		return (0); /* Not a built-in cmd */
+	}
 
-    return (1); /* Command was a built-in */
+	return (1); /* Command was a built-in */
 }

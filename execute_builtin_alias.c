@@ -8,7 +8,7 @@
  */
 struct AliasList *create_alias_list(void)
 {
-	struct AliasList *list = (struct AliasList*)malloc(sizeof(struct AliasList));
+	struct AliasList *list = (struct AliasList *)malloc(sizeof(struct AliasList));
 
 	if (list == NULL)
 	{

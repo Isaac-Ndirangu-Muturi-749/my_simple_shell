@@ -1,5 +1,6 @@
 #include "main.h"
-
+#include "main2.h"
+#include "main3.h"
 /**
  * exec_builtin_cmd - Executes built-in cmds.
  *

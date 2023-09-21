@@ -1,4 +1,6 @@
 #include "main.h"
+#include "main2.h"
+#include "main3.h"
 
 /**
  * _strcpy - a function that copies a string from src to dest

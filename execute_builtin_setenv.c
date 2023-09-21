@@ -1,4 +1,6 @@
 #include "main.h"
+#include "main2.h"
+#include "main3.h"
 
 /**
  * _getenv_len - Calculates the length of an environment variable.

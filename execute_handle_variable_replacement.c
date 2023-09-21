@@ -1,4 +1,6 @@
 #include "main.h"
+#include "main2.h"
+#include "main3.h"
 
 /**
  * var_replace - Handles variable replacement in cmd

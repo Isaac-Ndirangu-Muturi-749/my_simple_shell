@@ -1,4 +1,6 @@
 #include "main.h"
+#include "main2.h"
+#include "main3.h"
 
 /**
  * execute_exit - Executes the "exit" built-in cmd.

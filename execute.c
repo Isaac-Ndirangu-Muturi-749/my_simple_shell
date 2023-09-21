@@ -1,6 +1,6 @@
 #include "main.h"
-#include <stddef.h>
-#include <sys/types.h>
+#include "main2.h"
+#include "main3.h"
 
 /**
  * execute_commands - Execute a command or a series of commands separated

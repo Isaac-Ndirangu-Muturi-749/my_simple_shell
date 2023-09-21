@@ -1,4 +1,6 @@
 #include "main.h"
+#include "main2.h"
+#include "main3.h"
 
 
 /**
@@ -100,4 +102,3 @@ const char *find_alias(const struct AliasList *list, const char *name)
 	}
 	return (NULL); /* Alias not found */
 }
-

@@ -1,5 +1,6 @@
 #include "main.h"
-
+#include "main2.h"
+#include "main3.h"
 /**
  * _getline - Reads a line of text from a file descriptor and stores it in a
  *            dynamically allocated buffer.

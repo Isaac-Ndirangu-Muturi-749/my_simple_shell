@@ -10,18 +10,18 @@
  */
 void update_alias(struct AliasList *list, const char *name, const char *newval)
 {
-	struct Alias *current = list->head;
+    struct Alias *current = list->head;
 
-	while (current != NULL)
-	{
-		if (strcmp(current->name, name) == 0)
-		{
-			free(current->value);
-			current->value = strdup(newval);
-			return;
-		}
-		current = current->next;
-	}
+    while (current != NULL)
+    {
+        if (strcmp(current->name, name) == 0)
+        {
+            free(current->value);
+            current->value = strdup(newval);
+            return;
+        }
+        current = current->next;
+    }
 }
 
 /**
@@ -34,44 +34,50 @@ void update_alias(struct AliasList *list, const char *name, const char *newval)
  */
 void execute_alias(struct AliasList *list, char **args, int arg_c)
 {
-	if (arg_c < 2)
-	{
-		_write_str("Usage: alias [name[='value'] ...]\n");
-	} else
-	{
-		for (int i = 1; i < arg_c; i++)
-		{
-			/* Split the argument into name and value */
-			char *name = args[i];
-			const char *value = strchr(args[i], '=');
+    int i;
 
-			if (value == NULL)
-			{
-				/* If no '=' is present, set alias to an empty string */
-				value = "";
-			} else
-			{
-				value++;/* Move the value pointer past '=' */
-			}
+    if (arg_c < 2)
+    {
+        _write_str("Usage: alias [name[='value'] ...]\n");
+    }
+    else
+    {
+        for (i = 1; i < arg_c; i++)
+        {
+            /* Split the argument into name and value */
+            char *name = args[i];
+            const char *value = strchr(args[i], '=');
+			const char *existing_value;
 
-			/* Check if the alias already exists and update it, or add a new alias */
-			const char *existing_value = find_alias(list, name);
+            if (value == NULL)
+            {
+                /* If no '=' is present, set alias to an empty string */
+                value = "";
+            }
+            else
+            {
+                value++; /* Move the value pointer past '=' */
+            }
 
-			if (existing_value != NULL)
-			{
-				/* Alias already exists, update its value */
-				update_alias(list, name, value);
-			} else
-			{
-				/* Alias doesn't exist, add a new alias */
-				add_alias(list, name, value);
-			}
-			/* Print the alias */
-			_write_str("Setting alias: ");
-			_write_str(name);
-			_write_str("='");
-			_write_str(value);
-			_write_str("'\n");
-		}
-	}
+            /* Check if the alias already exists and update it, or add a new alias */
+            existing_value = find_alias(list, name);
+
+            if (existing_value != NULL)
+            {
+                /* Alias already exists, update its value */
+                update_alias(list, name, value);
+            }
+            else
+            {
+                /* Alias doesn't exist, add a new alias */
+                add_alias(list, name, value);
+            }
+            /* Print the alias */
+            _write_str("Setting alias: ");
+            _write_str(name);
+            _write_str("='");
+            _write_str(value);
+            _write_str("'\n");
+        }
+    }
 }

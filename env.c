@@ -1,3 +1,4 @@
+
 #include "main.h"
 
 /**
@@ -27,6 +28,7 @@ char *_getenv(char *name)
 	return (NULL); /* Variable not found */
 }
 
+
 /**
  * _unsetenv - Unsets (removes) an environment variable.
  *
@@ -41,22 +43,23 @@ char *_getenv(char *name)
 int _unsetenv(char *var)
 {
 	char **environ_ptr = environ;
+	int index;
 
 	if (!environ_ptr || !var)
 	{
 		return (0);
 	}
 
-	int index = 0;
+	index = 0;
 
 	while (environ_ptr[index] != NULL)
 	{
-		if (_startswith(environ_ptr[index], var) &&
-			environ_ptr[index][_strlen(var)] == '=')
+		int i;
 
+		if (_startswith(environ_ptr[index], var) && environ_ptr[index][_strlen(var)] == '=')
 		{
 			/* Remove the entry by shifting all entries after it */
-			for (int i = index; environ_ptr[i] != NULL; i++)
+			for (i = index; environ_ptr[i] != NULL; i++)
 			{
 				environ_ptr[i] = environ_ptr[i + 1];
 			}

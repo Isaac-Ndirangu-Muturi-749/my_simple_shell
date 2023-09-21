@@ -9,84 +9,106 @@
  */
 char *find_cmd_path(char *cmd)
 {
-	/* Check if the cmd exists in one of the directories in PATH */
-	char *path = _getenv("PATH");
-	char *path_copy = _strdup(path); /* Make a copy of PATH */
-	char *dir = _strtok(path_copy, ":");
-	char *cmd_path = NULL;
+    char *path = _getenv("PATH");
+    char *path_copy = _strdup(path); /* Make a copy of PATH */
+    char *dir = _strtok(path_copy, ":");
+    char *cmd_path = NULL;
 
-	while (dir != NULL)
-	{
-		/* Construct the full path to the cmd */
-		char full_path[MAX_INPUT_SIZE];
+    while (dir != NULL)
+    {
+        char full_path[MAX_INPUT_SIZE];
 
-		_write_str(dir);
-		_write_char('/');
-		_write_str(cmd);
+        /* Construct the full path to the cmd */
+        _strcpy(full_path, dir);
+        _strcat(full_path, "/");
+        _strcat(full_path, cmd);
 
-		/* Check if the cmd exists in this directory */
-		if (access(full_path, X_OK) == 0)
-		{
-			/* Command exists, set cmd_path and break */
-			cmd_path = _strdup(full_path);
-			break;
-		}
+        /* Check if the cmd exists in this directory */
+        if (access(full_path, X_OK) == 0)
+        {
+            /* Command exists, set cmd_path and break */
+            cmd_path = _strdup(full_path);
+            break;
+        }
 
-		dir = _strtok(NULL, ":");
-	}
+        dir = _strtok(NULL, ":");
+    }
 
-	free(path_copy);
-	return (cmd_path);
+    free(path_copy);
+    return cmd_path;
 }
 
-
 /**
- * execute_external_comand - Executes an external cmd.
+ * execute_external_command - Executes an external cmd.
  *
  * @args:             An array of strings representing the cmd arguments.
  * @arg_c:        The number of arguments in the array.
  * @lastexit_status: Pointer to an integer containing the last exit status.
  */
-void execute_external_comand(char **args, int arg_c, int *lastexit_status)
+void execute_external_command(char **args, int arg_c, int *lastexit_status)
 {
-	pid_t pid = fork();/* Fork a child process */
+    pid_t pid = fork(); /* Fork a child process */
 
-	if (pid == 0)
-	{
-		char *cmd_path = find_cmd_path(args[0]);/* Child process */
+    if (pid == -1)
+    {
+        perror("fork");
+        return;
+    }
 
-		if (cmd_path != NULL)
-		{
-			/* Execute cmd using full path,Adjust no of arguments as needed*/
-			char *const cmd_argv[] = {cmd_path, args[0], args[1], args[2], NULL};
+    if (pid == 0)
+    {
+        char *cmd_path = find_cmd_path(args[0]); /* Child process */
 
-			if (execve(cmd_path, cmd_argv, environ) == -1)
-			{
-				perror("execve");
-				exit(EXIT_FAILURE);
-			}
-		} else
-		{
-			char msg[MAX_INPUT_SIZE];/* Command not found in PATH */
+        if (cmd_path != NULL)
+        {
+            /* Build cmd_argv dynamically based on the number of arguments */
+            char **cmd_argv = (char **)malloc((arg_c + 1) * sizeof(char *));
+            int i;
 
-			_write_str("Command not found: ");
-			_write_str(args[0]);
-			_write_newline();
-			write(STDERR_FILENO, msg, _strlen(msg));
-			exit(EXIT_FAILURE);
-		}
-	} else if (pid < 0)
-	{
-		perror("fork");
-	} else
-	{
-		int status;/* Parent process */
+			if (cmd_argv == NULL)
+            {
+                perror("malloc");
+                exit(EXIT_FAILURE);
+            }
 
-		waitpid(pid, &status, 0);
+            for (i = 0; i < arg_c; i++)
+            {
+                cmd_argv[i] = args[i];
+            }
+            cmd_argv[arg_c] = NULL; /* NULL-terminate the array */
 
-		if (WIFEXITED(status))
-		{
-			*lastexit_status = WEXITSTATUS(status);
-		}
-	}
+            if (execve(cmd_path, cmd_argv, environ) == -1)
+            {
+                perror("execve");
+                exit(EXIT_FAILURE);
+            }
+
+            free(cmd_argv); /* Free dynamically allocated memory */
+        }
+        else
+        {
+            char msg[MAX_INPUT_SIZE]; /* Command not found in PATH */
+
+            _write_str("Command not found: ");
+            _write_str(args[0]);
+            _write_newline();
+            write(STDERR_FILENO, msg, _strlen(msg));
+            exit(EXIT_FAILURE);
+        }
+    }
+    else
+    {
+        int status; /* Parent process */
+
+        if (waitpid(pid, &status, 0) == -1)
+        {
+            perror("waitpid");
+            return;
+        }
+
+        if (WIFEXITED(status))
+        {
+            *lastexit_status = WEXITSTATUS(status);
+        }
+    }
 }

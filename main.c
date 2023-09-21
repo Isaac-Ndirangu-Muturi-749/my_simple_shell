@@ -35,17 +35,16 @@ int batch_mode(char *filename, struct AliasList *alias_list)
 {
 	/* Open the batch file for reading */
 	int file_fd = open(filename, O_RDONLY);
+	/* Allocate memory for input */
+	char *input = (char *)malloc(MAX_INPUT_SIZE);
+	size_t input_size = MAX_INPUT_SIZE;
+	ssize_t line_length;
 
 	if (file_fd == -1)
 	{
 		perror("open");
 		return (EXIT_FAILURE);
 	}
-
-	/* Allocate memory for input */
-	char *input = (char *)malloc(MAX_INPUT_SIZE);
-	size_t input_size = MAX_INPUT_SIZE;
-	ssize_t line_length;
 
 	if (input == NULL)
 	{
@@ -58,7 +57,7 @@ int batch_mode(char *filename, struct AliasList *alias_list)
 	while ((line_length = _getline(&input, &input_size, file_fd)) != -1)
 	{
 		input[line_length - 1] = '\0'; /* Remove newline character */
-		execute_cmd(input, alias_list);
+		execute_command(input, alias_list);
 ;
 	}
 
@@ -106,7 +105,7 @@ int interactive_mode(struct AliasList *alias_list)
 		}
 
 		input[line_length - 1] = '\0'; /* Remove newline character */
-		execute_cmd(input, alias_list);
+		execute_command(input, alias_list);
 ;
 	}
 

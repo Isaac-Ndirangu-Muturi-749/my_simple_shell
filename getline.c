@@ -29,7 +29,7 @@ ssize_t _getline(char **lineptr, size_t *n, int fd)
 
 	while (1)
 	{
-		if (totalBytesRead >= *n)
+		if ((size_t)totalBytesRead >= *n)
 		{
 			if (resize_buffer(lineptr, n) == -1)
 				return (-1);
@@ -58,6 +58,7 @@ ssize_t _getline(char **lineptr, size_t *n, int fd)
 	return (totalBytesRead);
 }
 
+
 /**
  * resize_buffer - Resize the buffer pointed to by lineptr.
  *
@@ -66,7 +67,7 @@ ssize_t _getline(char **lineptr, size_t *n, int fd)
  *
  * Return: 0 on success, -1 on failure.
  */
-static int resize_buffer(char **lineptr, size_t *n)
+int resize_buffer(char **lineptr, size_t *n)
 {
 	size_t new_size = (*n == 0) ? 128 : *n * 2;
 	char *new_line = malloc(new_size);

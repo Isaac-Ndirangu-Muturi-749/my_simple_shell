@@ -67,6 +67,7 @@ int _strcmp(char *s1, char *s2)
 	return (*s1 - *s2);
 }
 
+
 /**
  * _strtok - Breaks a string into a sequence of zero or more non-empty tokens.
  *
@@ -77,36 +78,54 @@ int _strcmp(char *s1, char *s2)
  */
 char *_strtok(char *str, const char *delim)
 {
-	static char *last_str;
+    static char *last_str;
+    char *start;
+    char *end;
 
-	if (str != NULL)
-	{
-		last_str = str;
-	}
-	if (last_str == NULL || *last_str == '\0')
-	{
-		return (NULL);
-	}
-	char *start = last_str;
+    if (str != NULL)
+    {
+        last_str = str;
+    }
+    
+    if (last_str == NULL || *last_str == '\0')
+    {
+        return (NULL); /* No more tokens to extract */
+    }
 
-	while (*start != '\0' && _strchr(delim, *start) != NULL)
-	{
-		start++;
-	}
-	if (*start == '\0')
-	{
-		last_str = NULL;
-		return (NULL);
-	}
-	char *end = start + 1;
+    start = last_str;
 
-	while (*end != '\0' && _strchr(delim, *end) == NULL)
-	{
-		end++;
-	}
-	*end = '\0';
-	last_str = end + 1;
-	return (start);
+    /* Find the start of the token */
+    while (*start != '\0' && _strchr(delim, *start) != NULL)
+    {
+        start++;
+    }
+
+    if (*start == '\0')
+    {
+        last_str = NULL;
+        return (NULL); /* No more tokens to extract */
+    }
+
+    end = start + 1;
+
+    /* Find the end of the token */
+    while (*end != '\0' && _strchr(delim, *end) == NULL)
+    {
+        end++;
+    }
+
+    /* Set the last_str pointer for the next call */
+    if (*end == '\0')
+    {
+        last_str = NULL;
+    }
+    else
+    {
+        *end = '\0';
+        last_str = end + 1;
+    }
+
+    return (start);
 }
 
 /**
@@ -119,14 +138,19 @@ char *_strtok(char *str, const char *delim)
  */
 const char *_strchr(const char *s, char c)
 {
-	while (*s != '\0')
-	{
-		if (*s == c)
-			return (s);
-		s++;
-	}
-	if (*s == c)
-		return (s);
-	return (NULL);
-}
+    while (*s != '\0')
+    {
+        if (*s == c)
+        {
+            return (s);
+        }
+        s++;
+    }
 
+    if (*s == c)
+    {
+        return (s);
+    }
+
+    return (NULL); /* Character not found */
+}

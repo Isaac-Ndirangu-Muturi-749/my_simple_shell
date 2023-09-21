@@ -24,6 +24,7 @@ void _write_int(int num)
 	char buffer[20]; /* Assuming a reasonable buffer size */
 	int length = 0;
 	int temp = num;
+	int i;
 
 	/* Handle negative numbers */
 	if (temp < 0)
@@ -39,17 +40,11 @@ void _write_int(int num)
 	} while (temp > 0);
 
 	/* Reverse the string to get the correct order */
-	for (int i = 0, j = length - 1; i < j; i++, j--)
+	for (i = length - 1; i >= 0; i--)
 	{
-		char tmp = buffer[i];
-
-		buffer[i] = buffer[j];
-		buffer[j] = tmp;
+		_write_char(buffer[i]);
 	}
-
-	write(STDOUT_FILENO, buffer, length);
 }
-
 
 /**
  * _write_char - Writes a single character to standard output.

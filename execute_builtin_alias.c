@@ -1,5 +1,6 @@
 #include "main.h"
 
+
 /**
  * create_alias_list - Initialize an alias list.
  *
@@ -7,7 +8,7 @@
  */
 struct AliasList *create_alias_list(void)
 {
-	struct AliasList *list = (struct AliasList *)malloc(sizeof(struct AliasList));
+	struct AliasList *list = (struct AliasList*)malloc(sizeof(struct AliasList));
 
 	if (list == NULL)
 	{
@@ -43,8 +44,7 @@ void add_alias(struct AliasList *list, const char *name, const char *value)
 	if (list->head == NULL)
 	{
 		list->head = new_alias;
-	}
-	else
+	} else
 	{
 		struct Alias *current = list->head;
 
@@ -84,7 +84,7 @@ void print_aliases(const struct AliasList *list)
  * @list: The alias list to search in.
  * @name: The name of the alias to find.
  *
- * Return: The value of the alias if found, or NULL if not found.
+ * return: The value of the alias if found, or NULL if not found.
  */
 const char *find_alias(const struct AliasList *list, const char *name)
 {
@@ -100,3 +100,4 @@ const char *find_alias(const struct AliasList *list, const char *name)
 	}
 	return (NULL); /* Alias not found */
 }
+

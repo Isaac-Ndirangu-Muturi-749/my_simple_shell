@@ -3,7 +3,8 @@
 #include <sys/types.h>
 
 /**
- * execute_command - Execute a command or a series of commands separated by semicolons.
+ * execute_command - Execute a command or a series of commands separated
+ * by semicolons.
  *
  * @command: The command string to execute.
  * @alias_list: A pointer to the alias list.

@@ -84,7 +84,7 @@ void print_aliases(const struct AliasList *list)
  * @list: The alias list to search in.
  * @name: The name of the alias to find.
  *
- * return: The value of the alias if found, or NULL if not found.
+ * Return: The value of the alias if found, or NULL if not found.
  */
 const char *find_alias(const struct AliasList *list, const char *name)
 {

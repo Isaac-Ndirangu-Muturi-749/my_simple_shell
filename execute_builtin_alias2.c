@@ -44,15 +44,13 @@ void execute_alias(struct AliasList *list, char **args, int arg_c)
 	{
 		for (i = 1; i < arg_c; i++)
 		{
-			/* Split the argument into name and value */
-			char *name = args[i];
+			char *name = args[i];/* Split the argument into name and value */
 			const char *value = strchr(args[i], '=');
 			const char *existing_value;
 
 			if (value == NULL)
 			{
-				/* If no '=' is present, set alias to an empty string */
-				value = "";
+				value = "";/* If no '=' is present, set alias to an empty string */
 			}
 			else
 			{
@@ -60,19 +58,15 @@ void execute_alias(struct AliasList *list, char **args, int arg_c)
 			}
 			/* Check if the alias already exists and update it, or add a new alias */
 			existing_value = find_alias(list, name);
-
 			if (existing_value != NULL)
 			{
-				/* Alias already exists, update its value */
-				update_alias(list, name, value);
+				update_alias(list, name, value);/* Alias exists, update its value */
 			}
 			else
 			{
-				/* Alias doesn't exist, add a new alias */
-				add_alias(list, name, value);
+				add_alias(list, name, value);/* Alias doesn't exist, add a new alias */
 			}
-			/* Print the alias */
-			_write_str("Setting alias: ");
+			_write_str("Setting alias: ");/* Print the alias */
 			_write_str(name);
 			_write_str("='");
 			_write_str(value);

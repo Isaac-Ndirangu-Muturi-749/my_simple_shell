@@ -3,13 +3,13 @@
 #include <sys/types.h>
 
 /**
- * execute_command - Execute a command or a series of commands separated
+ * execute_commands - Execute a command or a series of commands separated
  * by semicolons.
  *
  * @command: The command string to execute.
  * @alias_list: A pointer to the alias list.
  */
-void execute_command(char *command, struct AliasList *alias_list)
+void execute_commands(char *command, struct AliasList *alias_list)
 {
 	int lastexit_status = 0; /* $? is initialized to 0 */
 	pid_t shell_pid = getpid(); /* $$ is the shell's PID */

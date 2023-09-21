@@ -56,7 +56,8 @@ int _unsetenv(char *var)
 	{
 		int i;
 
-		if (_startswith(environ_ptr[index], var) && environ_ptr[index][_strlen(var)] == '=')
+		if (_startswith(environ_ptr[index], var) &&
+			environ_ptr[index][_strlen(var)] == '=')
 		{
 			/* Remove the entry by shifting all entries after it */
 			for (i = index; environ_ptr[i] != NULL; i++)

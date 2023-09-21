@@ -25,7 +25,8 @@ int execute_exit(char **args, int arg_c)
 		exit(0);
 	}
 
-	/* Control should not reach here, but return a value to satisfy the compiler. */
+	/* Control should not reach here, but return a value to satisfy the*/
+    /* compiler. */
 	return (0);
 }
 

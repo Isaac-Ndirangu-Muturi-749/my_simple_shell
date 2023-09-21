@@ -39,76 +39,67 @@ char *find_cmd_path(char *cmd)
 }
 
 /**
- * execute_external_command - Executes an external cmd.
+ * execute_external_command - Executes an external command.
  *
- * @args:             An array of strings representing the cmd arguments.
- * @arg_c:        The number of arguments in the array.
+ * @args: An array of strings representing the command arguments.
+ * @arg_c: The number of arguments in the array.
  * @lastexit_status: Pointer to an integer containing the last exit status.
  */
 void execute_external_command(char **args, int arg_c, int *lastexit_status)
 {
-	pid_t pid = fork(); /* Fork a child process */
+	pid_t pid = fork_child_process();
+
+	if (pid == 0)
+	{
+		execute_command(args, arg_c);
+	} else
+	{
+		wait_for_child_process(pid, lastexit_status);
+	}
+}
+
+
+/**
+ * fork_child_process - Forks a child process and returns the process ID.
+ *
+ * Return: The process ID of the child process.
+ */
+pid_t fork_child_process(void)
+{
+	pid_t pid = fork();
 
 	if (pid == -1)
 	{
 		perror("fork");
-		return;
+		exit(EXIT_FAILURE);
 	}
+	return (pid);
+}
 
-	if (pid == 0)
+/**
+ * execute_command - Executes the command using the execve system call.
+ *
+ * @args: An array of strings representing the command arguments.
+ * @arg_c: The number of arguments in the array.
+ */
+void execute_command(char **args, int arg_c)
+{
+	char *cmd_path = find_cmd_path(args[0]);
+
+	if (cmd_path != NULL)
 	{
-		char *cmd_path = find_cmd_path(args[0]); /* Child process */
+		char **cmd_argv = build_command_arguments(args, arg_c);
 
-		if (cmd_path != NULL)
+		if (execve(cmd_path, cmd_argv, environ) == -1)
 		{
-			/* Build cmd_argv dynamically based on the number of arguments */
-			char **cmd_argv = (char **)malloc((arg_c + 1) * sizeof(char *));
-			int i;
-
-			if (cmd_argv == NULL)
-			{
-				perror("malloc");
-				exit(EXIT_FAILURE);
-			}
-
-			for (i = 0; i < arg_c; i++)
-			{
-				cmd_argv[i] = args[i];
-			}
-			cmd_argv[arg_c] = NULL; /* NULL-terminate the array */
-
-			if (execve(cmd_path, cmd_argv, environ) == -1)
-			{
-				perror("execve");
-				exit(EXIT_FAILURE);
-			}
-
-			free(cmd_argv); /* Free dynamically allocated memory */
-		}
-		else
-		{
-			char msg[MAX_INPUT_SIZE]; /* Command not found in PATH */
-
-			_write_str("Command not found: ");
-			_write_str(args[0]);
-			_write_newline();
-			write(STDERR_FILENO, msg, _strlen(msg));
+			perror("execve");
 			exit(EXIT_FAILURE);
 		}
-	}
-	else
+		free(cmd_argv);
+	} else
 	{
-		int status; /* Parent process */
-
-		if (waitpid(pid, &status, 0) == -1)
-		{
-			perror("waitpid");
-			return;
-		}
-
-		if (WIFEXITED(status))
-		{
-			*lastexit_status = WEXITSTATUS(status);
-		}
+		handle_command_not_found(args[0]);
 	}
 }
+
+

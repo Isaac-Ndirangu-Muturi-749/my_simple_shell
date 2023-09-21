@@ -31,7 +31,13 @@ extern struct AliasList *alias_list;
 extern struct Alias *alias_head;
 
 /* Function declarations */
-void execute_command(char *command, struct AliasList *alias_list);
+pid_t fork_child_process(void);
+void execute_command(char **args, int arg_c);
+char **build_command_arguments(char **args, int arg_c);
+void handle_command_not_found(char *cmd);
+void wait_for_child_process(pid_t pid, int *lastexit_status);
+
+void execute_commands(char *command, struct AliasList *alias_list);
 void execute_one_command(char *command, int *lastexit_status, pid_t shell_pid, struct AliasList *alias_list);
 struct AliasList* create_alias_list(void);
 void add_alias(struct AliasList *list, const char *name, const char *value);

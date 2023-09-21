@@ -47,7 +47,7 @@ Before you begin, ensure you have met the following requirements:
 1. Clone this repository to your local machine:
 
    ```bash
-   git clone https://github.com/yourusername/simple-shell.git
+   git clone https://github.com/Isaac-Ndirangu-Muturi-749/simple_shell
    ```
 
 2. Navigate to the project directory:
@@ -94,8 +94,9 @@ The Simple Shell supports the following built-in commands:
 - `env`: Display the environment variables.
 - `exit`: Exit the shell.
 - `alias`: Define and manage custom command aliases.
+- `setenv`: Sets the value of an environment variable or creates a new one
+- `unsetenv`:  Unsets (removes) an environment variable.
 
-For more details on using these commands, refer to the [Built-in Commands](docs/built-in-commands.md) documentation.
 
 ## Contributing
 
@@ -106,7 +107,6 @@ Contributions are welcome! To contribute to this project, follow these steps:
 3. Make your changes and ensure that the code passes all tests.
 4. Create a pull request (PR) to the main repository.
 
-For more information on contributing, please read our [Contribution Guidelines](CONTRIBUTING.md).
 
 ## License
 

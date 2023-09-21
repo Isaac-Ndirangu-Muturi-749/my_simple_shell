@@ -1,8 +1,8 @@
 Follow me on Twitter 🐦, connect with me on LinkedIn 🔗, and check out my GitHub 🐙. You won't be disappointed!
 
-👉 Twitter: https://twitter.com/NdiranguMuturi1
-👉 LinkedIn: https://www.linkedin.com/in/isaac-muturi-3b6b2b237
-👉 GitHub: https://github.com/Isaac-Ndirangu-Muturi-749
+👉 Twitter: https://twitter.com/NdiranguMuturi1  
+👉 LinkedIn: https://www.linkedin.com/in/isaac-muturi-3b6b2b237  
+👉 GitHub: https://github.com/Isaac-Ndirangu-Muturi-749  
 
 # Simple Shell
 ![cmd](cmd.png)
@@ -114,6 +114,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 Follow me on Twitter 🐦, connect with me on LinkedIn 🔗, and check out my GitHub 🐙. You won't be disappointed!
 
-👉 Twitter: https://twitter.com/NdiranguMuturi1
-👉 LinkedIn: https://www.linkedin.com/in/isaac-muturi-3b6b2b237
-👉 GitHub: https://github.com/Isaac-Ndirangu-Muturi-749
+👉 Twitter: https://twitter.com/NdiranguMuturi1  
+👉 LinkedIn: https://www.linkedin.com/in/isaac-muturi-3b6b2b237  
+👉 GitHub: https://github.com/Isaac-Ndirangu-Muturi-749  
